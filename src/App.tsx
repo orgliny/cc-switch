@@ -66,6 +66,7 @@ import WorkspaceFilesPanel from "@/components/workspace/WorkspaceFilesPanel";
 import EnvPanel from "@/components/openclaw/EnvPanel";
 import ToolsPanel from "@/components/openclaw/ToolsPanel";
 import AgentsDefaultsPanel from "@/components/openclaw/AgentsDefaultsPanel";
+import { LogsDashboard } from "@/components/logs/LogsDashboard";
 
 type View =
   | "providers"
@@ -80,7 +81,8 @@ type View =
   | "workspace"
   | "openclawEnv"
   | "openclawTools"
-  | "openclawAgents";
+  | "openclawAgents"
+  | "logs";
 
 interface WebDavSyncStatusUpdatedPayload {
   source?: string;
@@ -124,6 +126,7 @@ const VALID_VIEWS: View[] = [
   "openclawEnv",
   "openclawTools",
   "openclawAgents",
+  "logs",
 ];
 
 const getInitialView = (): View => {
@@ -706,6 +709,8 @@ function App() {
           return <ToolsPanel />;
         case "openclawAgents":
           return <AgentsDefaultsPanel />;
+        case "logs":
+          return <LogsDashboard />;
         default:
           return (
             <div className="px-6 flex flex-col h-[calc(100vh-8rem)] overflow-hidden">
@@ -865,6 +870,7 @@ function App() {
                     })}
                   {currentView === "sessions" && t("sessionManager.title")}
                   {currentView === "workspace" && t("workspace.title")}
+                  {currentView === "logs" && t("logs.title")}
                   {currentView === "openclawEnv" && t("openclaw.env.title")}
                   {currentView === "openclawTools" && t("openclaw.tools.title")}
                   {currentView === "openclawAgents" &&
@@ -906,7 +912,7 @@ function App() {
                     setCurrentView("settings");
                   }}
                 />
-                {isCurrentAppTakeoverActive && (
+                <>
                   <Button
                     variant="ghost"
                     size="icon"
@@ -921,7 +927,19 @@ function App() {
                   >
                     <BarChart2 className="w-4 h-4" />
                   </Button>
-                )}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+                      setSettingsDefaultTab("logs");
+                      setCurrentView("settings");
+                    }}
+                    title={t("logs.title")}
+                    className="hover:bg-black/5 dark:hover:bg-white/5"
+                  >
+                    <History className="w-4 h-4" />
+                  </Button>
+                </>
               </div>
             )}
           </div>
